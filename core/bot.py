@@ -1099,7 +1099,7 @@ def load_handlers():
     """Dynamically load and register all handlers."""
     try:
         # Import handler modules to get their functions
-        from .handlers import start, test, help, speed, cleanup, cancel, download, batch, stats
+        from .handlers import start, test, help, speed, cleanup, cancel, download, batch, stats, session
         
         # Register handlers with bot_client
         bot_client.on_message(filters.command("start"))(start.start_command)
