@@ -5,7 +5,6 @@ import shutil
 
 from ..performance import performance_optimizer
 from ..managers.download_manager import download_manager
-from ..managers.file_manager import file_manager
 from ..bot import safe_execute_send
 
 logger = logging.getLogger(__name__)
@@ -32,28 +31,26 @@ async def stats_command(client, message: Message):
                 "warning": False
             }
 
-        try:
-            dir_stats = file_manager.get_directory_stats()
-        except Exception:
-            downloads_dir = "downloads"
-            if os.path.exists(downloads_dir):
-                files = [
-                    f for f in os.listdir(downloads_dir)
-                    if os.path.isfile(os.path.join(downloads_dir, f))
-                ]
-                total_size = sum(
-                    os.path.getsize(os.path.join(downloads_dir, f))
-                    for f in files
-                )
-                dir_stats = {
-                    "total_files": len(files),
-                    "total_size_mb": total_size / (1024 ** 2)
-                }
-            else:
-                dir_stats = {
-                    "total_files": 0,
-                    "total_size_mb": 0
-                }
+        downloads_dir = "downloads"
+
+        if os.path.exists(downloads_dir):
+            files = [
+                f for f in os.listdir(downloads_dir)
+                if os.path.isfile(os.path.join(downloads_dir, f))
+            ]
+            total_size = sum(
+                os.path.getsize(os.path.join(downloads_dir, f))
+                for f in files
+            )
+            dir_stats = {
+                "total_files": len(files),
+                "total_size_mb": total_size / (1024 ** 2)
+            }
+        else:
+            dir_stats = {
+                "total_files": 0,
+                "total_size_mb": 0
+            }
 
         stats_text = (
             "📊 **Performance Statistics**\n\n"
